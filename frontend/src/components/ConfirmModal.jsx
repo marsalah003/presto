@@ -16,15 +16,16 @@ const style = {
   p: 4,
 };
 
-const TextModal = ({ btnName, handleConfirm }) => {
-  const [text, setText] = React.useState('');
+const ConfirmModal = ({ message, handleConfirm, myRef }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>{btnName}</Button>
+      <Button ref={myRef} onClick={handleOpen}>
+        Delete Presentation
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -32,33 +33,24 @@ const TextModal = ({ btnName, handleConfirm }) => {
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography
-            id='modal-modal-title'
-            variant='h6'
-            component='h2'
-          ></Typography>
-          <textarea
-            name=''
-            id=''
-            cols='30'
-            rows='10'
-            value={text}
-            onChange={({ target: { value } }) => setText(value)}
-          ></textarea>
+          <Typography id='modal-modal-title' variant='h6' component='h2'>
+            {message}
+          </Typography>
+
           <br />
           <button
-            disabled={text === ''}
             onClick={() => {
-              handleConfirm(text);
+              handleConfirm();
               handleClose();
             }}
           >
             {' '}
-            Create
+            Yes
           </button>
+          <button onClick={() => handleClose()}> No</button>
         </Box>
       </Modal>
     </div>
   );
 };
-export default TextModal;
+export default ConfirmModal;
