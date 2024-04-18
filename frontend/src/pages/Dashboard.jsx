@@ -1,61 +1,87 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from '../components/LogoutButton';
 import { UserContext } from '../App';
 import TextModal from '../components/TextModal';
 import { getUserStore, putUserStore } from '../helpers';
 import { v4 as uuidv4 } from 'uuid';
 import PresentationCard from '../components/PresentationCard';
-
+import Container from '@mui/material/Container';
+import { CssBaseline, Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 const Dashboard = () => {
-  const { token } = useContext(UserContext);
+  const { token, handleBar } = useContext(UserContext);
   const [store, setStore] = useState({ presentations: [] });
+  const [createModal, setCreateModal] = useState('');
   const navigate = useNavigate();
 
-  const viewPresentation = async (index) => {
-    navigate(`/presentation/${index}`);
-  };
+  const viewPresentation = async (index) => navigate(`/presentation/${index}`);
 
   const handleCreatePres = async (title) => {
     try {
-      const {
-        data: { store },
-      } = await getUserStore(token);
+      const store = await getUserStore(token);
 
       store.presentations.push({
         id: uuidv4(),
         title,
-        slides: [{ text: 'slide 1', textBoxes: [] }],
+        defaultSlideTheme: '#880808',
+        slides: [
+          {
+            texts: [],
+            images: [],
+            videos: [],
+            codes: [],
+          },
+        ],
         thumbnail:
           'https://endoftheroll.com/wp-content/uploads/2022/12/dt_X714RCT28MT.jpg',
       });
       await putUserStore(token, { store });
       getData();
+      handleBar('Created a new presentation', 'success');
     } catch (err) {
-      console.log(err);
+      handleBar('Error in created a presentatin', 'error');
     }
   };
 
   const getData = async () => {
-    const {
-      data: { store },
-    } = await getUserStore(token);
-    setStore(store);
+    try {
+      const store = await getUserStore(token);
+      setStore(store);
+    } catch (error) {
+      handleBar('An error has occured', 'error');
+    }
   };
 
-  useEffect(getData, []);
   useEffect(() => {
-    if (!localStorage.getItem('token')) navigate('/register');
+    if (!token) navigate('/login');
   });
-  console.log(store);
+
+  useEffect(() => {
+    if (token) getData();
+  }, []);
+
+  const handleCreatePresButton = () => setCreateModal('Create Presentation');
+
   return (
-    <>
+    <Container component='main' maxWidth='md'>
+      <CssBaseline />
       &nbsp;
-      <LogoutButton />
       <TextModal
-        btnName={'New Presentation'}
         handleConfirm={handleCreatePres}
+        open={createModal}
+        btnName={'Create'}
+        label='New Presentation'
+        handleOptions={setCreateModal}
       />
+      <Fab
+        style={{ marginBottom: '5px' }}
+        color='primary'
+        aria-label='add'
+        onClick={handleCreatePresButton}
+      >
+        <AddIcon />
+      </Fab>
+      <br />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
         {store.presentations.map(
           ({ title, slides, thumbnail, description }, index) => (
@@ -69,8 +95,7 @@ const Dashboard = () => {
           )
         )}
       </div>
-      <h1> Token: {localStorage.getItem('token')}</h1>
-    </>
+    </Container>
   );
 };
 

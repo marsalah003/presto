@@ -9,48 +9,49 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
+  borderRadius: '15px',
+  width: '100%',
+  maxWidth: '500px',
   boxShadow: 24,
   p: 4,
 };
 
-const ConfirmModal = ({ message, handleConfirm, myRef }) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const ConfirmModal = ({ message, handleConfirm, open, handleOptions }) => {
+  const handleClose = () => handleOptions('');
 
   return (
-    <div>
-      <Button ref={myRef} onClick={handleOpen}>
-        Delete Presentation
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
-        <Box sx={style}>
-          <Typography id='modal-modal-title' variant='h6' component='h2'>
-            {message}
-          </Typography>
-
-          <br />
-          <button
-            onClick={() => {
-              handleConfirm();
-              handleClose();
-            }}
-          >
-            {' '}
-            Yes
-          </button>
-          <button onClick={() => handleClose()}> No</button>
-        </Box>
-      </Modal>
-    </div>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby='modal-modal-title'
+      aria-describedby='modal-modal-description'
+    >
+      <Box sx={style}>
+        <Typography id='modal-modal-title' variant='h5' component='h2'>
+          {message}
+        </Typography>
+        <br />
+        <Button
+          onClick={() => {
+            handleConfirm();
+            handleClose();
+          }}
+          variant='contained'
+          color='error'
+          size='large'
+        >
+          {' '}
+          Yes
+        </Button>
+        &nbsp; &nbsp;&nbsp;
+        <Button variant='contained' onClick={() => handleClose()} size='large'>
+          {' '}
+          No
+        </Button>
+      </Box>
+    </Modal>
   );
 };
 export default ConfirmModal;

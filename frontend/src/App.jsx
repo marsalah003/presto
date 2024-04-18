@@ -1,13 +1,21 @@
 /* eslint-disable space-before-function-paren */
 import React, { useState, createContext } from 'react';
-import { BrowserRouter, Route, Routes, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Presentation from './pages/Presentation';
+import ResponsiveAppBar from './components/ResponsiveAppBar';
+
+import { useSnackbar } from 'notistack';
+
 const UserContext = createContext();
 
 const App = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleBar = (msg, variant) => enqueueSnackbar(msg, { variant });
+
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const handleToken = (token) => {
     setToken(token);
@@ -20,9 +28,10 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        <UserContext.Provider value={{ token, handleToken, removeToken }}>
-          <Link to='/login'>Login</Link> | &nbsp;
-          <Link to='/register'>Register</Link>
+        <UserContext.Provider
+          value={{ token, handleToken, removeToken, handleBar }}
+        >
+          <ResponsiveAppBar isLoggedIn={token} />
           <Routes>
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='register' element={<Register />} />

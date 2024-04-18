@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const PresentationCard = ({ name, slides, thumbnail, description, onView }) => (
-  <Card sx={{ minWidth: 100, maxWidth: 300 }}>
+  <Card sx={{ maxWidth: 200, width: '100%' }}>
     <CardMedia
       sx={{ height: 140 }}
       image={
@@ -17,7 +17,12 @@ const PresentationCard = ({ name, slides, thumbnail, description, onView }) => (
       title={`presentation ${name}`}
     />
     <CardContent>
-      <Typography gutterBottom variant='h5' component='div'>
+      <Typography
+        gutterBottom
+        variant='subtitle1'
+        component='div'
+        overflow='hidden'
+      >
         {name}
       </Typography>
       <Typography variant='body2' color='text.secondary'>
@@ -28,8 +33,7 @@ const PresentationCard = ({ name, slides, thumbnail, description, onView }) => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button size='small'>Share</Button>
-      <Button size='small' onClick={onView}>
+      <Button size='md' variant='contained' onClick={onView}>
         View
       </Button>
     </CardActions>
