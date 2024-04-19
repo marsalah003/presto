@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import axios from 'axios';
 import { BACKEND_URL } from '../config';
@@ -24,8 +24,6 @@ const ResponsiveAppBar = ({ isLoggedIn }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const location = useLocation();
-  console.log(location);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };

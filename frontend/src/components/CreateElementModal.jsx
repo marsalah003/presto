@@ -27,7 +27,6 @@ const CreateElementModal = ({
 
   React.useEffect(() => {
     if (properties) {
-      console.log(type);
       const obj = properties.reduce(
         (acc, cur) => ({ ...acc, [cur]: cur === 'autplay' ? true : '' }),
         {}
@@ -35,14 +34,11 @@ const CreateElementModal = ({
       setForm(obj);
     }
   }, [type]);
-  console.log(form);
-  const handleForm = ({ target: { value, name, type, checked } }) => {
-    console.log(name, type, checked);
+  const handleForm = ({ target: { value, name, type, checked } }) =>
     setForm((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-  };
 
   return (
     <>
@@ -55,40 +51,37 @@ const CreateElementModal = ({
           style={{ overflow: 'scroll' }}
         >
           <Box sx={style}>
-            {Object.keys(form).map((key, index) => {
-              console.log(key, form[key]);
-              return (
-                <>
-                  {key === 'autoplay' && (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={Boolean(form[key])}
-                          onChange={handleForm}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                          name='autoplay'
-                        />
-                      }
-                      label='Autoplay'
-                    />
-                  )}
-                  {key !== 'autoplay' && (
-                    <TextField
-                      name={key}
-                      onChange={handleForm}
-                      value={form[key]}
-                      multiline={key === 'text'}
-                      label={key}
-                      id={key}
-                      key={index}
-                      rows={key === 'text' ? 8 : 0}
-                      fullWidth
-                      style={{ textAlign: 'centre', marginBottom: '30px' }}
-                    />
-                  )}
-                </>
-              );
-            })}
+            {Object.keys(form).map((key, index) => (
+              <>
+                {key === 'autoplay' && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={Boolean(form[key])}
+                        onChange={handleForm}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        name='autoplay'
+                      />
+                    }
+                    label='Autoplay'
+                  />
+                )}
+                {key !== 'autoplay' && (
+                  <TextField
+                    name={key}
+                    onChange={handleForm}
+                    value={form[key]}
+                    multiline={key === 'text'}
+                    label={key}
+                    id={key}
+                    key={index}
+                    rows={key === 'text' ? 8 : 0}
+                    fullWidth
+                    style={{ textAlign: 'centre', marginBottom: '30px' }}
+                  />
+                )}
+              </>
+            ))}
 
             <br />
             <Button

@@ -54,7 +54,6 @@ const Presentation = () => {
   const [counter, setCounter] = useState(0);
   const [insertModal, setInsertModal] = useState(''); // code or text or...
   const [optionModal, setOptionModal] = useState('');
-  console.log(elements);
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -82,7 +81,6 @@ const Presentation = () => {
       const { slides, title, defaultSlideTheme } = await getCur('pres');
 
       setSlideData({ ...slides[newSlide], presTitle: title });
-      console.log('slides', slides[newSlide], slides[newSlide].texts);
       setTexts(slides[newSlide].texts);
       setImages(slides[newSlide].images);
       setVideos(slides[newSlide].videos);
@@ -94,7 +92,6 @@ const Presentation = () => {
       const isPrevSlide = hasPrevSlide(newSlide);
       setSlidePos((prev) => ({ next: isNextSlide, prev: isPrevSlide }));
     } catch (err) {
-      console.log(err);
       handleBar('error occured trying to fetch presentation data', 'error');
     }
   };
@@ -115,7 +112,7 @@ const Presentation = () => {
       await putUserStore(token, { store });
       getCurSlideData(slide);
     } catch (err) {
-      alert(err);
+      handleBar('error occured in updating the presentation title', 'error');
     }
   };
   const handleChangeThumbnail = async (newTN) => {
@@ -220,15 +217,12 @@ const Presentation = () => {
   };
   const handleCloseInsertModal = () => setInsertModal('');
   const handleInsertModal = (name) => {
-    console.log(name);
     setInsertModal(name);
   };
 
   const handleOptionsModal = (option) => setOptionModal(option);
 
   const convertNumToPerc = (size) => `${size}%`;
-
-  console.log(optionModal);
 
   return (
     <Container component='main' maxWidth='md'>
@@ -375,7 +369,6 @@ const Presentation = () => {
           overflow: 'hidden',
         }}
         onContextMenu={(e) => {
-          console.log(e);
           e.preventDefault();
         }}
       >

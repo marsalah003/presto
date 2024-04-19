@@ -26,7 +26,6 @@ const Login = () => {
     // check that passwords match HERE
     try {
       const data = new FormData(e.currentTarget);
-      console.log(data.get('email'), data.get('password'));
       const {
         data: { token },
       } = await axios.post(`${BACKEND_URL}/admin/auth/login`, {
